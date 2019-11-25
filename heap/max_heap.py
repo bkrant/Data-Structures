@@ -4,32 +4,11 @@ class Heap:
 
     def insert(self, value):
         insert_list = [None] + self.storage + [value]
-        while True:
-            swaps = 0
-            for i in range((len(insert_list)-1)//2 ,0, -1):
-                if 2*i+1 <= len(insert_list)-1:
-                    if insert_list[i] < insert_list[2*i] or insert_list[i] < insert_list[2*i+1]:
-                        max_child = max(insert_list[2*i], insert_list[2*i+1])
-                        if insert_list[2*i] == max_child:
-                            max_child_index = 2*i
-                        else:
-                            max_child_index = 2*i+1
-                        insert_list[i], insert_list[max_child_index] = max_child, insert_list[i]
-                        swaps += 1
-
-                else:
-                    if insert_list[i] < insert_list[2*i]:
-                        insert_list[i], insert_list[2*i] = insert_list[2*i], insert_list[i]
-                        swaps += 1
-
-            if swaps == 0:
-                break
-
-        self.storage = insert_list[1:]
-
+        self._heapify(insert_list)
 
     def delete(self):
-        pass
+        delete_list = [None] + [self.storage[-1]] + self.storage[1:-1]
+        self._heapify(delete_list)
 
     def get_max(self):
         return self.storage[0]
@@ -42,3 +21,27 @@ class Heap:
 
     def _sift_down(self, index):
         pass
+
+    def _heapify(self, list_to_heapify):
+        while True:
+            swaps = 0
+            for i in range((len(list_to_heapify)-1)//2 ,0, -1):
+                if 2*i+1 <= len(list_to_heapify)-1:
+                    if list_to_heapify[i] < list_to_heapify[2*i] or list_to_heapify[i] < list_to_heapify[2*i+1]:
+                        max_child = max(list_to_heapify[2*i], list_to_heapify[2*i+1])
+                        if list_to_heapify[2*i] == max_child:
+                            max_child_index = 2*i
+                        else:
+                            max_child_index = 2*i+1
+                        list_to_heapify[i], list_to_heapify[max_child_index] = max_child, list_to_heapify[i]
+                        swaps += 1
+
+                else:
+                    if list_to_heapify[i] < list_to_heapify[2*i]:
+                        list_to_heapify[i], list_to_heapify[2*i] = list_to_heapify[2*i], list_to_heapify[i]
+                        swaps += 1
+
+            if swaps == 0:
+                break
+
+        self.storage = list_to_heapify[1:]
